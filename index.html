@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>禎美樓・夏季套餐</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:     #A9251A;
+    --red-dk:  #7A1A12;
+    --olive:   #807540;
+    --olive-lt:#A8995A;
+    --black:   #111111;
+    --cream:   #F5EDD8;
+    --parch:   #EDE0C4;
+    --text:    #1A0A00;
+    --text-md: #5A3A1A;
+    --text-lt: #8A6A3A;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Noto Serif TC', serif;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ═══════════ HEADER ═══════════ */
+  .stripe { height:5px; background:var(--olive); }
+
+  header {
+    background: var(--black);
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+  }
+  header::before, header::after {
+    content:''; position:absolute;
+    top:5px; bottom:5px; width:5px;
+    background: var(--red);
+  }
+  header::before { left:0; }
+  header::after  { right:0; }
+
+  .logo-wrap {
+    display:inline-flex; flex-direction:column;
+    align-items:center; gap:4px;
+    opacity:0; animation: fadeD .7s ease forwards .1s;
+  }
+  .logo-row { display:flex; align-items:center; gap:6px; }
+
+  /* bracket corners */
+  .brk { display:flex; flex-direction:column; justify-content:space-between; height:48px; width:12px; }
+  .brk-t, .brk-b { width:12px; height:8px; border:2px solid #fff; }
+  .brk-t { border-bottom:none; border-right:none; }
+  .brk-b { border-top:none; border-right:none; }
+  .brk.r .brk-t { border-left:none; border-right:2px solid #fff; }
+  .brk.r .brk-b { border-left:none; border-right:2px solid #fff; }
+
+  .logo-zh { font-size: clamp(34px,9vw,52px); font-weight:900; color:#fff; letter-spacing:6px; line-height:1; }
+  .logo-en { font-size:10px; letter-spacing:5px; font-family:'Noto Sans TC',sans-serif; }
+  .logo-en .zm { color:var(--red); font-weight:700; }
+  .logo-en .hs { color:var(--red); }
+
+  .hdr-rule { display:flex; align-items:center; gap:10px; width:70%; max-width:280px; margin:12px auto 8px;
+    opacity:0; animation:fadeD .7s ease forwards .35s; }
+  .hdr-rule span { flex:1; height:1px; }
+  .hdr-rule span:first-child { background:linear-gradient(to right,transparent,var(--olive-lt)); }
+  .hdr-rule span:last-child  { background:linear-gradient(to left, transparent,var(--olive-lt)); }
+  .hdr-rule i { font-style:normal; color:var(--olive-lt); font-size:10px; }
+
+  .hdr-tag { font-size:11px; letter-spacing:5px; color:var(--olive-lt);
+    font-family:'Noto Sans TC',sans-serif; font-weight:300;
+    opacity:0; animation:fadeD .7s ease forwards .5s; }
+
+  .info-strip {
+    background:var(--red);
+    color:rgba(255,255,255,.9);
+    text-align:center; padding:9px 20px;
+    font-size:12px; letter-spacing:2.5px;
+    font-family:'Noto Sans TC',sans-serif;
+    border-bottom:3px solid var(--olive);
+  }
+
+  /* ═══════════ PKG TABS ═══════════ */
+  .pkg-nav {
+    display:flex; gap:0;
+    background:var(--black);
+    position:sticky; top:0; z-index:100;
+    border-bottom:3px solid var(--olive);
+  }
+  .pkg-tab-btn {
+    flex:1; padding:12px 4px;
+    font-family:'Noto Serif TC',serif;
+    font-size:13px; font-weight:700;
+    letter-spacing:2px; color:rgba(255,255,255,.5);
+    background:transparent; border:none; cursor:pointer;
+    border-right:1px solid rgba(255,255,255,.08);
+    transition: color .25s, background .25s;
+  }
+  .pkg-tab-btn:last-child { border-right:none; }
+  .pkg-tab-btn.active {
+    color:#fff; background:var(--red);
+  }
+  .pkg-tab-btn:hover:not(.active) { color:rgba(255,255,255,.8); }
+
+  /* ═══════════ PKG PANELS ═══════════ */
+  .pkg-panel { display:none; padding:0 0 60px; }
+  .pkg-panel.active { display:block; }
+
+  /* hero area of each panel */
+  .panel-hero {
+    background:var(--black);
+    padding:20px 20px 18px;
+    text-align:center;
+    border-bottom:3px solid var(--red);
+    position:relative;
+  }
+  .panel-title {
+    font-size: clamp(22px,6vw,30px);
+    font-weight:900; color:#fff; letter-spacing:4px;
+  }
+  .panel-en {
+    font-size:10px; letter-spacing:4px;
+    color:var(--olive-lt); font-family:'Noto Sans TC',sans-serif;
+    margin-top:4px;
+  }
+
+  /* tea included strip */
+  .tea-strip {
+    background:rgba(169,37,26,.12);
+    border-left:4px solid var(--red);
+    margin:18px 16px 0;
+    padding:10px 14px;
+    font-size:12.5px; color:var(--red);
+    letter-spacing:1.5px;
+    font-family:'Noto Sans TC',sans-serif;
+  }
+  .tea-strip strong { font-weight:700; }
+
+  /* dishes section label */
+  .dishes-label {
+    display:flex; align-items:center; gap:10px;
+    margin:20px 16px 12px;
+  }
+  .dishes-label span { flex:1; height:1px; background:var(--parch); }
+  .dishes-label i { font-style:normal; font-size:10px; letter-spacing:3px;
+    color:var(--olive); font-family:'Noto Sans TC',sans-serif; }
+
+  /* choice divider */
+  .choice-label {
+    margin:8px 16px 6px;
+    display:inline-block;
+    background:var(--red); color:#fff;
+    font-size:10.5px; letter-spacing:3px; padding:3px 12px;
+    font-family:'Noto Sans TC',sans-serif;
+  }
+
+  /* ── DISH CARD (clickable row) ── */
+  .dish-card {
+    display:flex; align-items:center; gap:12px;
+    margin:0 16px 10px;
+    background:#fff;
+    border-left:3px solid transparent;
+    padding:12px 14px;
+    cursor:pointer;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    border-radius:2px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dish-card:hover, .dish-card:active {
+    border-left-color: var(--red);
+    box-shadow: 0 3px 14px rgba(169,37,26,.15);
+    transform: translateX(2px);
+  }
+
+  .dish-thumb {
+    width:56px; height:56px; border-radius:2px;
+    background: linear-gradient(135deg,#e0d4b8,#c8b898);
+    flex-shrink:0; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; color:rgba(0,0,0,.25);
+    position:relative;
+  }
+  .dish-thumb img { width:100%; height:100%; object-fit:cover; }
+
+  .dish-info { flex:1; min-width:0; }
+  .dish-name-row {
+    font-size:15px; font-weight:700;
+    letter-spacing:1.5px; color:var(--text);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .dish-sub {
+    font-size:11px; color:var(--text-lt);
+    letter-spacing:1px; margin-top:3px;
+    font-family:'Noto Sans TC',sans-serif;
+    display:-webkit-box; -webkit-line-clamp:1;
+    -webkit-box-orient:vertical; overflow:hidden;
+  }
+
+  .dish-arrow {
+    font-size:14px; color:var(--parch);
+    flex-shrink:0; transition:color .2s;
+  }
+  .dish-card:hover .dish-arrow { color:var(--red); }
+
+  /* upgrade note */
+  .upgrade-note {
+    margin: -4px 16px 10px;
+    font-size:11px; color:var(--olive);
+    font-family:'Noto Sans TC',sans-serif;
+    letter-spacing:1.5px;
+    padding-left:20px;
+  }
+
+  /* ═══════════ LIGHTBOX ═══════════ */
+  .lb-overlay {
+    position:fixed; inset:0; z-index:9000;
+    background:rgba(0,0,0,.75);
+    display:flex; align-items:flex-end;
+    justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .28s ease;
+    -webkit-backdrop-filter:blur(3px);
+    backdrop-filter:blur(3px);
+  }
+  .lb-overlay.open {
+    opacity:1; pointer-events:all;
+  }
+
+  .lb-card {
+    background:var(--cream);
+    width:100%; max-width:520px;
+    max-height:88vh;
+    border-radius:8px 8px 0 0;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .32s cubic-bezier(.22,.61,.36,1);
+    position:relative;
+  }
+  .lb-overlay.open .lb-card {
+    transform:translateY(0);
+  }
+
+  .lb-photo {
+    width:100%; aspect-ratio:4/3;
+    background:linear-gradient(135deg,#e0d4b8,#c8b898);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:8px; position:relative;
+    border-bottom:3px solid var(--red);
+    overflow:hidden;
+  }
+  .lb-photo img { width:100%; height:100%; object-fit:cover; }
+  .lb-photo-icon { font-size:40px; opacity:.3; }
+  .lb-photo-txt { font-size:11px; letter-spacing:3px; color:var(--text-lt); opacity:.6;
+    font-family:'Noto Sans TC',sans-serif; }
+
+  /* which suite this dish belongs to */
+  .lb-suite-tag {
+    position:absolute; top:0; left:0;
+    background:rgba(0,0,0,.72);
+    color:rgba(255,255,255,.85);
+    font-size:10px; letter-spacing:3px;
+    padding:5px 14px;
+    font-family:'Noto Sans TC',sans-serif;
+    border-bottom-right-radius:4px;
+  }
+
+  .lb-close {
+    position:absolute; top:10px; right:14px;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(0,0,0,.55); color:#fff;
+    border:none; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    z-index:10; line-height:1;
+  }
+
+  .lb-body { padding:20px 20px 32px; }
+
+  .lb-dish-name {
+    font-size:22px; font-weight:900;
+    letter-spacing:2px; color:var(--text);
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--parch);
+  }
+
+  .lb-desc {
+    font-size:14px; line-height:1.9;
+    color:var(--text-md); letter-spacing:1px;
+    margin-bottom:16px;
+  }
+
+  .lb-note {
+    display:flex; align-items:flex-start; gap:8px;
+    background:rgba(169,37,26,.08);
+    border-left:3px solid var(--red);
+    padding:10px 12px;
+    font-size:12px; color:var(--red);
+    letter-spacing:1.5px;
+    font-family:'Noto Sans TC',sans-serif;
+  }
+
+  /* bottom drag handle */
+  .lb-handle {
+    width:40px; height:4px; border-radius:2px;
+    background:rgba(0,0,0,.15); margin:12px auto 0;
+  }
+
+  /* ═══════════ FOOTER ═══════════ */
+  footer {
+    background:var(--black); color:rgba(255,255,255,.5);
+    text-align:center; padding:28px 20px;
+    font-size:12px; letter-spacing:2px; line-height:2.2;
+    border-top:4px solid var(--olive);
+  }
+  footer strong { display:block; font-size:17px; font-weight:900;
+    color:#fff; letter-spacing:6px; margin-bottom:6px; }
+
+  /* ═══════════ ANIMATIONS ═══════════ */
+  @keyframes fadeD {
+    from { opacity:0; transform:translateY(-12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  @media (min-width:520px) {
+    .lb-card { border-radius:12px 12px 0 0; }
+    .dish-thumb { width:64px; height:64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stripe"></div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-row">
+      <div class="brk"><div class="brk-t"></div><div class="brk-b"></div></div>
+      <div class="logo-zh">禎美樓</div>
+      <div class="brk r"><div class="brk-t"></div><div class="brk-b"></div></div>
+    </div>
+    <div class="logo-en">
+      <span class="zm">Zhenmei</span>&nbsp;<span class="hs">House</span>
+    </div>
+  </div>
+  <div class="hdr-rule"><span></span><i>◆</i><span></span></div>
+  <div class="hdr-tag">中 菜 海 味 ・ 餐 酒 宴 席</div>
+</header>
+
+<div class="info-strip">夏 季 套 餐　｜　點擊菜名查看菜色詳情</div>
+
+<!-- ══ PACKAGE TABS ══ -->
+<nav class="pkg-nav">
+  <button class="pkg-tab-btn active" onclick="switchPkg(0)">潮生套餐</button>
+  <button class="pkg-tab-btn"        onclick="switchPkg(1)">聽濤套餐</button>
+  <button class="pkg-tab-btn"        onclick="switchPkg(2)">湧光套餐</button>
+</nav>
+
+<!-- ══════════════════════════════════
+     PKG 0 — 潮生套餐
+══════════════════════════════════ -->
+<section class="pkg-panel active" id="pkg-0">
+  <div class="panel-hero">
+    <div class="panel-title">潮生套餐</div>
+    <div class="panel-en">CHAO SHENG</div>
+  </div>
+
+  <div class="tea-strip">
+    <strong>迎賓茶飲：</strong>蝴蝶美人茶　｜　每位 ＋100 升級為氮氣泡台灣茶<br>
+    <strong>餐後茶飲：</strong>特選台灣茶 ／ 特選茶點
+  </div>
+
+  <div class="dishes-label"><span></span><i>套 餐 菜 色</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','禎美納福三彩盤','禎美招牌開席彩盤，以甲仙梅芒醬彩盅為引，搭配五味醬汁拌魚皮，口感Q彈帶勁；桂花白玉圓收尾，甜而不膩，一盤三味呈現禎美對待客之道的用心。','甲仙梅芒醬彩盅／五味拌魚皮／桂花白玉圓','')">
+    <div class="dish-thumb">🥗</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美納福三彩盤</div>
+      <div class="dish-sub">甲仙梅芒醬彩盅／五味拌魚皮／桂花白玉圓</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','港都果律沙拉拚糟燻玉子','以港都街頭風味為靈感，清爽果律沙拉搭配台式糟燻玉子，酸甜鹹香層次分明。用高雄在地食材詮釋南國港都的率性與活力。','','')">
+    <div class="dish-thumb">🥚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">港都果律沙拉拚糟燻玉子</div>
+      <div class="dish-sub">清爽開胃・南國港都風味</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','台味蒜香酥脆','嚴選台灣在地食材，以大量蒜香爆炒至金黃酥脆，每一口都帶著台式熱炒的魂魄。香氣四溢，是讓人忍不住一口接一口的下飯神器。','','')">
+    <div class="dish-thumb">🧄</div>
+    <div class="dish-info">
+      <div class="dish-name-row">台味蒜香酥脆</div>
+      <div class="dish-sub">台式熱炒魂・香氣逼人</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','文思五珍二路羹','源自古典文思豆腐刀工技藝，以五種海味珍材入羹，湯頭濃郁鮮甜，豆腐絲細如髮絲，入口即化。兩種口味呈現，喝得到師傅的耐心與工序。','','')">
+    <div class="dish-thumb">🥣</div>
+    <div class="dish-info">
+      <div class="dish-name-row">文思五珍二路羹</div>
+      <div class="dish-sub">古典刀工・五海珍材</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','現流海魚','每日嚴選當日現流鮮魚，依魚種特性選用最能展現原味的烹調方式。魚肉鮮嫩彈牙，醬汁清爽不奪味，吃得到大海最直接的饋贈。','','每位 ＋200 升級為活龍蝦')">
+    <div class="dish-thumb">🐟</div>
+    <div class="dish-info">
+      <div class="dish-name-row">現流海魚</div>
+      <div class="dish-sub">每日現撈・當令鮮魚</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','禎美招牌一品砂鍋雞湯','禎美樓鎮店湯品。採用砂鍋三白慢火燉製，搭配精選藥膳配料，湯色金黃清澈，喝一口暖胃暖心。每一碗都是後場師傅長時間守護的結晶。','含砂鍋三白及精選配料','')">
+    <div class="dish-thumb">🍲</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美招牌一品砂鍋雞湯</div>
+      <div class="dish-sub">含砂鍋三白及精選配料</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','香料鹽焗海大蝦','精選肥美海大蝦，以南洋香料與台式鹽焗工法慢烤，蝦殼焦香帶鹹，蝦肉飽滿Q彈，香料的異域氣息讓整道菜充滿記憶點。','','')">
+    <div class="dish-thumb">🦐</div>
+    <div class="dish-info">
+      <div class="dish-name-row">香料鹽焗海大蝦</div>
+      <div class="dish-sub">南洋香料・鹽焗工法</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','稻荷鮮香台味米糕','以日式稻荷油豆腐皮包裹台灣傳統米糕，甜鹹交融，米粒飽滿紮實。這道菜是禎美對「台灣味」的創意詮釋，也是許多客人回訪的理由之一。','','')">
+    <div class="dish-thumb">🍱</div>
+    <div class="dish-info">
+      <div class="dish-name-row">稻荷鮮香台味米糕</div>
+      <div class="dish-sub">日式包裝・台灣米糕靈魂</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('潮生套餐','慢燉紫米紅豆粥','以紫米與紅豆慢火熬製，綿密香甜，色澤深紫如絨，是整套宴席最溫柔的句點。暖胃也暖心，讓每一位客人帶著飽足與幸福離席。','','')">
+    <div class="dish-thumb">🍚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">慢燉紫米紅豆粥</div>
+      <div class="dish-sub">宴席收尾・慢火綿密</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PKG 1 — 聽濤套餐
+══════════════════════════════════ -->
+<section class="pkg-panel" id="pkg-1">
+  <div class="panel-hero">
+    <div class="panel-title">聽濤套餐</div>
+    <div class="panel-en">TING TAO</div>
+  </div>
+
+  <div class="tea-strip">
+    <strong>迎賓茶飲：</strong>蝴蝶美人茶　｜　每位 ＋100 升級為氮氣泡台灣茶<br>
+    <strong>餐後茶飲：</strong>特選台灣茶 ／ 特選茶點
+  </div>
+
+  <div class="dishes-label"><span></span><i>套 餐 菜 色</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','禎美納福五彩盤','升級版彩盤，五道精緻小品一次呈現。甲仙梅芒醬彩盅、五味拌魚皮、桂花白玉圓為基底，加入白味蒜香酥脆與稔香炙燒肉，層次更豐富，展現對賓客更高規格的歡迎之意。','甲仙梅芒醬彩盅／五味拌魚皮／桂花白玉圓／白味蒜香酥脆／稔香炙燒肉','')">
+    <div class="dish-thumb">🥗</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美納福五彩盤</div>
+      <div class="dish-sub">五道精緻小品・升級迎賓</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','港都海味果律沙拉拚糟燻玉子','在果律沙拉的基礎上加入海味食材，鮮味層次更上一層，搭配糟燻玉子的濃郁煙燻香，是一道視覺與味覺都令人印象深刻的開場菜色。','','')">
+    <div class="dish-thumb">🥚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">港都海味果律沙拉拚糟燻玉子</div>
+      <div class="dish-sub">加入海味・層次更豐富</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','香芒檸香大海蝦 ／ 三杯風沙牛柳粒','雙主角齊上。香芒檸香大海蝦以芒果與檸檬汁醃漬鮮蝦，酸甜清爽；三杯風沙牛柳粒則以台式三杯醬汁翻炒骰子牛，鑊氣十足，兩種風格形成完美對比。','','')">
+    <div class="dish-thumb">🍤</div>
+    <div class="dish-info">
+      <div class="dish-name-row">香芒檸香大海蝦 ／ 三杯風沙牛柳粒</div>
+      <div class="dish-sub">海陸雙主角</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dishes-label" style="margin-top:16px;"><span></span><i>以 下 二 擇 一</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','文思八珍二路羹','八種珍貴海陸食材入羹，鮮甜濃郁，工序繁複。師傅以古典文思刀工將食材切成細絲，口感滑順細緻，喝一口感受八珍匯聚的精華。可升級為十珍版本，加入魚翅與竹笙，宴席格調更上一階。','','每位 ＋100 升級為十珍・魚翅／竹笙')">
+    <div class="dish-thumb">🥣</div>
+    <div class="dish-info">
+      <div class="dish-name-row">文思八珍二路羹</div>
+      <div class="dish-sub">八珍入羹・古典工藝</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','燻烤台灣黑鮪戰斧','嚴選台灣近海黑鮪魚切成戰斧造型，以低溫慢燻後大火炙烤，外層焦香，內裡保留粉嫩魚肉的原汁原味。上桌時煙氣裊裊，是整桌宴席視覺震撼力最強的一道。','','')">
+    <div class="dish-thumb">🐟</div>
+    <div class="dish-info">
+      <div class="dish-name-row">燻烤台灣黑鮪戰斧</div>
+      <div class="dish-sub">台灣黑鮪・低溫慢燻</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dishes-label" style="margin-top:16px;"><span></span><i>套 餐 續 菜</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','禎美招牌一品砂鍋雞湯','禎美樓鎮店湯品。採用砂鍋三白慢火燉製，搭配精選藥膳配料，湯色金黃清澈，暖胃暖心。','含砂鍋三白及精選配料','')">
+    <div class="dish-thumb">🍲</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美招牌一品砂鍋雞湯</div>
+      <div class="dish-sub">含砂鍋三白及精選配料</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','現流海魚','每日嚴選當日現流鮮魚，依魚種特性選用最能展現原味的烹調方式，魚肉鮮嫩彈牙。','','每位 ＋200 升級為活龍蝦')">
+    <div class="dish-thumb">🐠</div>
+    <div class="dish-info">
+      <div class="dish-name-row">現流海魚</div>
+      <div class="dish-sub">每日現撈・當令鮮魚</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','千尋百味旺來炒飯','以鳳梨（旺來）果肉入鑊，搭配多種食材大火翻炒，鳳梨的甜酸香氣讓炒飯風味清爽不膩。米粒顆顆分明，是宴席尾段最受客人歡迎的主食。','','')">
+    <div class="dish-thumb">🍍</div>
+    <div class="dish-info">
+      <div class="dish-name-row">千尋百味旺來炒飯</div>
+      <div class="dish-sub">鳳梨入鑊・香氣清爽</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('聽濤套餐','慢燉紫米紅豆粥','以紫米與紅豆慢火熬製，綿密香甜，是整套宴席最溫柔的句點。','','')">
+    <div class="dish-thumb">🍚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">慢燉紫米紅豆粥</div>
+      <div class="dish-sub">宴席收尾・慢火綿密</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PKG 2 — 湧光套餐
+══════════════════════════════════ -->
+<section class="pkg-panel" id="pkg-2">
+  <div class="panel-hero">
+    <div class="panel-title">湧光套餐</div>
+    <div class="panel-en">YONG GUANG</div>
+  </div>
+
+  <div class="tea-strip">
+    <strong>迎賓茶飲：</strong>蝴蝶美人茶　｜　每位 ＋100 升級為氮氣泡台灣茶<br>
+    <strong>餐後茶飲：</strong>特選台灣茶 ／ 特選茶點
+  </div>
+
+  <div class="dishes-label"><span></span><i>套 餐 菜 色</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','禎美納福六彩盤','最高規格的迎賓彩盤，六道精緻小品一次呈現。在五彩盤基礎上加入白味醬醃漬生蝦，以日式醃漬工法鎖住蝦肉鮮甜，色彩繽紛，每一小品皆是師傅匠心之作。','甲仙梅芒醬彩盅／五味拌魚皮／桂花白玉圓／台味蒜香酥脆／稔香炙燒肉／白味醬醃漬生蝦','')">
+    <div class="dish-thumb">🥗</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美納福六彩盤</div>
+      <div class="dish-sub">六道精緻小品・最高規格迎賓</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','港都海味果律沙拉拚糟燻玉子','海味果律沙拉搭配糟燻玉子，鮮味與煙燻香氣交織，是令人印象深刻的開場菜色。','','')">
+    <div class="dish-thumb">🥚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">港都海味果律沙拉拚糟燻玉子</div>
+      <div class="dish-sub">海味升級・煙燻交織</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','香芒檸香大海蝦 ／ 三杯風沙牛柳粒','海陸雙主角同台。芒果檸檬醃蝦清爽酸甜，三杯風沙牛柳粒台式鑊氣十足，是湧光套餐展現食材廣度的核心菜色。','','')">
+    <div class="dish-thumb">🍤</div>
+    <div class="dish-info">
+      <div class="dish-name-row">香芒檸香大海蝦 ／ 三杯風沙牛柳粒</div>
+      <div class="dish-sub">海陸雙主角</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dishes-label" style="margin-top:16px;"><span></span><i>以 下 二 擇 一</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','文思十珍二路羹','集齊十種珍貴食材入羹，是文思羹系列的頂級版本。每一種食材都經過嚴格挑選，湯頭層次豐富，鮮味馥郁，代表禎美對宴席品質的最高承諾。','','')">
+    <div class="dish-thumb">🥣</div>
+    <div class="dish-info">
+      <div class="dish-name-row">文思十珍二路羹</div>
+      <div class="dish-sub">十珍匯聚・頂級工藝</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','燻烤台灣黑鮪戰斧','嚴選台灣近海黑鮪戰斧造型，低溫慢燻後大火炙烤，外焦內嫩，煙氣裊裊上桌，震撼全場。','','')">
+    <div class="dish-thumb">🐟</div>
+    <div class="dish-info">
+      <div class="dish-name-row">燻烤台灣黑鮪戰斧</div>
+      <div class="dish-sub">台灣黑鮪・震撼登場</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dishes-label" style="margin-top:16px;"><span></span><i>套 餐 續 菜</i><span></span></div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','禎美招牌魚唇一品砂鍋雞湯','在招牌砂鍋雞湯中加入珍貴魚唇，膠質豐富，口感滑嫩，湯頭更加濃郁醇厚。魚唇的加入讓這道湯品的格調提升到宴席頂配的水準。','含砂鍋三白及精選配料','')">
+    <div class="dish-thumb">🍲</div>
+    <div class="dish-info">
+      <div class="dish-name-row">禎美招牌魚唇一品砂鍋雞湯</div>
+      <div class="dish-sub">加入魚唇・頂配湯品</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','現流海魚','每日嚴選當日現流鮮魚，魚肉鮮嫩彈牙，醬汁清爽不奪味。','','每位 ＋150 升級為活龍蝦')">
+    <div class="dish-thumb">🐠</div>
+    <div class="dish-info">
+      <div class="dish-name-row">現流海魚</div>
+      <div class="dish-sub">每日現撈・當令鮮魚</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','千尋活龍百味旺來炒飯','升級版鳳梨炒飯，加入活龍蝦蝦膏提鮮，鳳梨清甜與龍蝦膏的濃郁鮮味完美融合，每一口都是米粒分明的鑊氣饗宴。','','')">
+    <div class="dish-thumb">🦞</div>
+    <div class="dish-info">
+      <div class="dish-name-row">千尋活龍百味旺來炒飯</div>
+      <div class="dish-sub">龍蝦膏提鮮・升級版炒飯</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+
+  <div class="dish-card" onclick="openDish('湧光套餐','慢燉紫米紅豆粥','以紫米與紅豆慢火熬製，綿密香甜，是整套宴席最溫柔的句點。','','')">
+    <div class="dish-thumb">🍚</div>
+    <div class="dish-info">
+      <div class="dish-name-row">慢燉紫米紅豆粥</div>
+      <div class="dish-sub">宴席收尾・慢火綿密</div>
+    </div>
+    <div class="dish-arrow">›</div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <strong>禎　美　樓</strong>
+  中菜海味・餐酒宴席<br>
+  高雄市前金區中華三路 65-6 號<br>
+  菜色依時令略有調整，詳細訂席請洽服務人員
+</footer>
+
+<!-- ═══════════ LIGHTBOX ═══════════ -->
+<div class="lb-overlay" id="lb" onclick="closeLbOverlay(event)">
+  <div class="lb-card" id="lb-card">
+    <div class="lb-handle"></div>
+    <div class="lb-photo" id="lb-photo">
+      <button class="lb-close" onclick="closeLb()">✕</button>
+      <div class="lb-suite-tag" id="lb-suite"></div>
+      <div class="lb-photo-icon">🍽</div>
+      <div class="lb-photo-txt">菜色照片</div>
+    </div>
+    <div class="lb-body">
+      <div class="lb-dish-name" id="lb-name"></div>
+      <div class="lb-desc"     id="lb-desc"></div>
+      <div class="lb-note"     id="lb-note" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Tab switching ──────────────────────────────────────────────────
+  function switchPkg(idx) {
+    document.querySelectorAll('.pkg-panel').forEach((p,i) => {
+      p.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.pkg-tab-btn').forEach((b,i) => {
+      b.classList.toggle('active', i === idx);
+    });
+    // scroll back to top of content
+    window.scrollTo({ top: document.querySelector('.pkg-nav').offsetTop - 2, behavior: 'smooth' });
+  }
+
+  // ── Lightbox ───────────────────────────────────────────────────────
+  function openDish(suite, name, desc, sub, upgrade) {
+    document.getElementById('lb-suite').textContent = suite;
+    document.getElementById('lb-name').textContent  = name;
+    document.getElementById('lb-desc').textContent  = desc || (sub ? sub : '');
+
+    const noteEl = document.getElementById('lb-note');
+    if (upgrade) {
+      noteEl.textContent = '升級選項：' + upgrade;
+      noteEl.style.display = 'flex';
+    } else {
+      noteEl.style.display = 'none';
+    }
+
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLb() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLbOverlay(e) {
+    // close only if clicking the dark backdrop, not the card itself
+    if (e.target === document.getElementById('lb')) closeLb();
+  }
+
+  // close on Escape key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+</body>
+</html>
